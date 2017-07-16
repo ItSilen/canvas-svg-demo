@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="css/backToTop.css">
+	<style>
+		html, body{
+			margin: 0;
+			padding: 0;
+			line-height: 0;
+			font-size: 0;
+		}
+
+		svg{
+			background-color: #001122;
+		}
+
+		#clock-wrapper{
+			text-align: right;
+			margin-bottom: 20px;
+			background-color: blue;
+			position: relative;
+		}
+
+		#clock-wrapper div{
+			position: absolute;
+			right: 200px;
+			bottom: 30px;
+		}
+
+		#clock-wrapper a{
+			display: inline-block;
+			margin-right: 20px;
+			padding: 6px 12px;
+			line-height: 12px;
+			border: 1px solid #fff;
+			border-radius: 12px;
+			font-family: "微软雅黑";
+			font-size: 12px;
+			font-weight: 500;
+			color: #fff;
+			text-decoration: none;
+		}
+
+		#clock{
+			margin: 20px;
+		}
+
+		#canvas-wrapper{
+			width: 100%;
+			background-color: #393550;
+			text-align: center;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="clock-wrapper">
+		<div>
+			<a href="#canvas-wrapper">闪闪的星星</a>
+			<a href="#change-img">图像转换</a>
+			<a href="#sea-night">海上灯塔</a>
+		</div>
+		<canvas id="clock" width="150px" height="150px"></canvas>
+	</div>
+	<div id="canvas-wrapper">
+		<canvas id="canvas" width="800" height="624"></canvas>
+	</div>
+
+	<div id="change-img" style="height: 624px;width: 100%">
+		<div style="margin:0 auto; padding:20px 0; width:100%;text-align: center;">
+			<canvas id="canvasa" style="width: 48%;height: 460px;margin-right: 3%;border:1px solid #ddd;">
+				当前浏览器不支持，请更换浏览器后再试
+			</canvas>
+
+			<canvas id="canvasb" style="width: 48%;height: 460px;border:1px solid #ddd;">
+				当前浏览器不支持，请更换浏览器后再试
+			</canvas>
+		</div>
+
+		<div style="clear:both"></div>
+
+		<div style="text-align:center;margin-bottom: 20px; font-size: 20px;">
+			<a href="javascript:grayEffect()">Gray Effect</a>
+			<a href="javascript:blackEffect()">BlackWhite Effect</a>
+			<a href="javascript:reverseEffect()">Reverse Effect</a>
+			<a href="javascript:blurEffect()">Blur Effect</a>
+			<a href="javascript:masaicEffect()">Masaic Effect</a>
+		</div>
+	</div>
+
+	<svg width="100%" height="100%" id="sea-night"
+		viewBox="-400 -300 800 600"
+		preserveAspectRatio="xMidYMid slice">
+		<defs>	
+			<polygon id="star" points="0 -10 2 -2 10 0 2 2 0 10 -2 2 -10 0 -2 -2" fill="white"></polygon>	
+		</defs>
+		<g id="real">
+			<g id="star-group"></g> 
+			<g id="moon-group">
+				<mask id="moon-mask">
+					<circle cx="-250" cy="-150" r="100" fill="white"></circle>
+					<circle cx="-200" cy="-200" r="100" fill="black"></circle>
+				</mask>
+				<circle cx="-250" cy="-150" r="100" fill="yellow" mask="url(#moon-mask)"></circle>
+			</g>
+			<g id="light-tower" transform="translate(250,0)">
+				<defs>
+					<linearGradient id="tower" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0" stop-color="#999"></stop>
+						<stop offset="1" stop-color="#333"></stop>
+					</linearGradient>
+
+					<radialGradient id="light" cx="0.5" cy="0.5" r="0.5">
+						<stop offset="0" stop-color="rgba(255, 255, 255, 0.8)"></stop>
+						<stop offset="1" stop-color="rgba(255, 255, 255, 0)"></stop>
+					</radialGradient>
+					
+					<clipPath id="light-clip">
+						<polygon points="0 0 -400 -15 -400 15" fill="rgba(255, 0, 0, .5)">
+							<animateTransform 
+								attributeName="transform"
+								attributeType="XML"
+								type="rotate"
+								from="0"
+								to="360"
+								dur="10s"
+								repeatCount="indefinite"
+								></animateTransform>
+						</polygon>
+						<circle cx="0" cy="0" r="2"></circle>
+					</clipPath>
+					
+				</defs>	
+				<polygon points="0 0 5 50 -5 50" fill="url(#tower)"></polygon>
+				<ellipse cx="0" cy="0" rx="300" ry="100" fill="url(#light)"  clip-path="url(#light-clip)"></ellipse>	
+			</g> 
+		</g>
+		<g id="reflect" transform="translate(0 50)" mask="url(#fading)">
+			<defs>
+				<linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+					<stop offset="0" stop-color="rgba(255,255,255,0.3"></stop>
+					<stop offset="0.5" stop-color="rgba(255,255,255,0"></stop>
+				</linearGradient>
+				<mask id="fading">
+					<rect x="-400" y="0" width="800" height="300" fill="url(#fade)"></rect>
+				</mask>
+			</defs>
+			<use xlink:href="#real" transform="scale(1, -1) translate(0 -50)" ></use>
+
+		</g>
+		<!-- <line x1="-400" y1="50" x2="400" y2="50" stroke="white"></line> -->
+	</svg>
+	<div class="ui-backtotop-wrapper">
+	</div>
+	<a href="javascript:;" id="ui-backtotop-btn" title="回到顶部"></a>
+
+	
+
+</body>
+<script src="js/backToTop.js"></script>
+<script src="js/canvascommonFunctions.js"></script>
+<script type="text/javascript" src="js/canvas_clock.js"></script>
+<script>
+	(function(){
+			var canvas;
+			var context;
+
+			var girlPic = new Image();
+			var starPic = new Image();
+
+			var num = 60;
+			var stars = [];
+
+			var lastTime;
+			var deltaTime;
+
+			var switchy = false;
+			var life = 0;
+
+			function init() {
+				canvas = document.getElementById("canvas");
+				context = canvas.getContext("2d");
+
+				w = canvas.width;
+				h = canvas.height;
+
+				canvas.addEventListener("mousemove", mousemove, false);
+
+				girlPic.src = "images/girl.jpg";
+				starPic.src = "images/star.png";
+
+				for (var i = 0; i < num; i++) {
+					var obj = new starObject();
+					stars.push(obj);
+					stars[i].init();
+				}
+
+				lastTime = Date.now();
+
+				gameLoop();
+
+			}
+
+
+			document.body.onload = init;
+
+			function gameLoop() {
+				window.requestAnimationFrame(gameLoop)
+				var now = Date.now();
+				deltaTime = now - lastTime;
+				lastTime = now;
+
+				drawBackground();
+				drawGirl();
+				drawStars()
+				aliveUpdate()
+
+			}
+
+			function drawBackground() {
+				context.clearRect(0, 0, w, h );
+				context.fillStyle = "#393550";
+				context.fillRect(0, 0, w, h );
+			}
+
+			function drawGirl() {
+				context.drawImage(girlPic, 50, 100, 800, 400)
+			}
+
+
+
+
+			var starObject = function() {
+				this.x;
+				this.y;
+
+				this.picNo;
+				this.timer;
+
+				this.xSpd;
+				this.ySpd;
+			} 
+
+			starObject.prototype.init = function() {
+				this.x = Math.random() * 800 + 50;
+				this.y = Math.random() * 400 + 100;
+
+				this.picNo = Math.floor(Math.random() * 7);
+				this.timer = 0;
+
+				this.xSpd = Math.random() * 3 - 1.5;
+				this.ySpd = Math.random() * 3 - 1.5;
+			}
+
+			starObject.prototype.update = function() {
+				this.x += this.xSpd * deltaTime * 0.004;
+				this.y += this.ySpd * deltaTime * 0.004;
+
+				if (this.x < 50 || this.x > 850) {
+					this.init();
+					return;
+				}
+
+				if (this.y < 100 || this.y > 500) {
+					this.init();
+					return;
+				}
+
+
+				this.timer += deltaTime;
+
+				if (this.timer > 50) {
+					this.picNo += 1;
+					this.picNo %= 7;
+					this.timer = 0;
+				}
+			}
+
+			starObject.prototype.draw = function() {
+				context.save();
+				context.globalAlpha = life;
+
+				context.drawImage(starPic, this.picNo * 7, 0, 7, 7, this.x, this.y, 7, 7)
+				context.restore();
+			}
+
+			function drawStars() {
+				for (var i = 0; i < num; i++) {
+					stars[i].update();
+					stars[i].draw();
+				}
+			}
+
+			function mousemove(e) {
+				if (e.offsetX || e.layerX) {
+					var px = e.offsetX || e.layerX;
+					var py = e.offsetY || e.layerY;
+				}
+
+				if (px > 50 && px < 850 && py > 100 && py < 500) {
+					switchy = true;
+				} else {
+					switchy = false;
+				}
+
+				
+				
+			}
+
+			function aliveUpdate() {
+				if (switchy) {
+					life += 0.03 * deltaTime * 0.05;
+					if (life > 1) {
+						life = 1;
+					}
+				} else {
+					life -= 0.03 * deltaTime * 0.05;
+					if (life < 0) {
+						life = 0;
+					}
+				}
+			}
+	})()
+</script> 
+<script>
+	// (function() {
+		var canvasa = document.getElementById("canvasa");
+		var contexta = canvasa.getContext("2d");
+
+		var canvasb = document.getElementById("canvasb");
+		var contextb= canvasb.getContext("2d");
+
+		var image = new Image();
+
+		
+		// window.onload = function() {
+			
+			image.src = "images/autumn.jpg";
+
+			image.onload = function() {
+				contexta.drawImage(image, 0, 0, canvasa.width, canvasa.height);
+				
+				
+			}
+		// }
+
+		function grayEffect() {
+			var imageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+
+			var pixelData = imageData.data;
+
+			for (var i = 0; i < canvasb.width * canvasb.height; i++) {
+				var r = pixelData[4 * i + 0];
+				var g = pixelData[4 * i + 1];
+				var b = pixelData[4 * i + 2];
+
+				var grey = r * 0.3 + g * 0.59 + b * 0.11;
+
+				pixelData[4 * i + 0] = grey;
+				pixelData[4 * i + 1] = grey;
+				pixelData[4 * i + 2] = grey;
+			}
+			contextb.putImageData(imageData, 0, 0, 0, 0, canvasb.width, canvasb.height);
+		}
+
+		function blackEffect() {
+			var imageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+
+			var pixelData = imageData.data;
+
+			for (var i = 0; i < canvasb.width * canvasb.height; i++) {
+				var r = pixelData[4 * i + 0];
+				var g = pixelData[4 * i + 1];
+				var b = pixelData[4 * i + 2];
+
+				var grey = r * 0.3 + g * 0.59 + b * 0.11;
+				if (grey > 255 / 2) {
+					v = 255;
+				} else {
+					v = 0;
+				}
+
+				pixelData[4 * i + 0] = v;
+				pixelData[4 * i + 1] = v;
+				pixelData[4 * i + 2] = v;
+			}
+			contextb.putImageData(imageData, 0, 0, 0, 0, canvasb.width, canvasb.height);
+		}
+
+		function reverseEffect() {
+			var imageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+
+			var pixelData = imageData.data;
+
+			for (var i = 0; i < canvasb.width * canvasb.height; i++) {
+				var r = pixelData[4 * i + 0];
+				var g = pixelData[4 * i + 1];
+				var b = pixelData[4 * i + 2];
+
+				pixelData[4 * i + 0] = 255 - r;
+				pixelData[4 * i + 1] = 255 - g;
+				pixelData[4 * i + 2] = 255 - b;
+			}
+			contextb.putImageData(imageData, 0, 0, 0, 0, canvasb.width, canvasb.height);
+		}
+
+		function blurEffect() {
+			var tmpImageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+			var tmppixelData = tmpImageData.data;
+
+			var imageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+			var pixelData = imageData.data;
+
+			var blurR = 3;
+			var totalnum = (2 * blurR + 1) *  (2 * blurR + 1) 
+
+			for (var i = blurR; i < canvasb.height -blurR; i++) 
+				for (var j = blurR; j < canvasb.width -blurR; j++) {
+
+					var totalr = 0, totalg = 0, totalb = 0;
+					for (var dx = -blurR; dx < blurR; dx++) 
+						for (var dy = -blurR; dy < blurR; dy++) {
+							var x = i + dx;
+							var y = j + dy;
+
+							var p = x * canvasb.width + y;
+							totalr += tmppixelData[p * 4 + 0];
+							totalg += tmppixelData[p * 4 + 1];
+							totalb += tmppixelData[p * 4 + 2];
+						}
+
+					var p = i * canvasb.width + j;
+
+					pixelData[p * 4 + 0] = totalr / totalnum;
+					pixelData[p * 4 + 1] = totalg / totalnum;
+					pixelData[p * 4 + 2] = totalb / totalnum;
+
+				}
+
+			
+			contextb.putImageData(imageData, 0, 0, 0, 0, canvasb.width, canvasb.height);
+		}
+
+
+		function masaicEffect() {
+			var tmpImageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+			var tmppixelData = tmpImageData.data;
+
+			var imageData = contexta.getImageData(0, 0, canvasa.width, canvasa.height);
+			var pixelData = imageData.data;
+
+			var size = 16;
+			var totalnum = size * size;
+
+			for (var i = 0; i < canvasb.height ; i += size) 
+				for (var j = 0; j < canvasb.width ; j += size) {
+
+					var totalr = 0, totalg = 0, totalb = 0;
+					for (var dx = 0; dx < size; dx++) 
+						for (var dy = 0; dy < size; dy++) {
+							var x = i + dx;
+							var y = j + dy;
+
+							var p = x * canvasb.width + y;
+							totalr += tmppixelData[p * 4 + 0];
+							totalg += tmppixelData[p * 4 + 1];
+							totalb += tmppixelData[p * 4 + 2];
+						}
+
+					// var p = i * canvasb.width + j;
+
+					var resr = totalr / totalnum;
+					var resg = totalg / totalnum;
+					var resb = totalb / totalnum;
+
+					for (var dx = 0; dx < size; dx++) 
+						for (var dy = 0; dy < size; dy++) {
+							var x = i + dx;
+							var y = j + dy;
+							var p = x * canvasb.width + y;
+
+							pixelData[p * 4 + 0] = resr;
+							pixelData[p * 4 + 1] = resg;
+							pixelData[p * 4 + 2] = resb;
+					}
+				}
+			contextb.putImageData(imageData, 0, 0, 0, 0, canvasb.width, canvasb.height);
+		}
+
+</script>
+<script>
+	(function(){
+		var SVG_NS = "http://www.w3.org/2000/svg";
+		var XLINK_NS = "http://www.w3.org/1999/xlink";
+		
+		var paper = document.querySelector("svg");
+
+		renderStar();
+
+		function use(origin) {
+			var _use = document.createElementNS(SVG_NS, "use");
+			_use.setAttributeNS(XLINK_NS, "xlink:href", "#" + origin.id);
+			return _use;
+		}
+
+		function random(min, max) {
+			return min + (max - min) * Math.random();
+		}
+
+		function renderStar() {
+			var starCount = 200;
+			var starRef = document.getElementById("star");
+			var starGroup = document.getElementById("star-group");
+
+			var star;
+
+			while (starCount--) {
+				star = use(starRef);
+				star.setAttribute("opacity", random(0.1, 0.4));
+				star.setAttribute("transform", "translate(" + random(-400, 400) + "," + random(-300, 50) + ") "
+					+
+					"scale(" + random(0.1, 0.6) + ")");
+				starGroup.appendChild(star);
+			}
+		}
+	})()
+</script>
+
+</html>
